@@ -1,58 +1,77 @@
-let values = [];
-let i = 0;
-let j = 0;
+// bubble sort
 
-// The statements in the setup() function
-// execute once when the program begins
-// The array is filled with random values in setup() function.
+// init
+var w = 5;
+var delay = 0;
+var values = [];
+var states = [];
+
 function setup() {
-    createCanvas(720, 400);
-    for (let i = 0; i < width / 8; i++) {
-        values.push(random(height));
+    createCanvas(windowWidth, windowHeight);
+    values = new Array(floor(width / w));
+    for (i = 0; i < values.length; i++) {
+        values[i] = floor(random(height));
+        states[i] = 'u';
+    }
+    bubbleSort();
+}
+
+function draw() {
+    background("black");
+    for (i = 0; i < values.length; i++) {
+        noStroke();
+        if (states[i] == 's') {
+            fill("red");
+        } else if (states[i] == 'l') {
+            fill("green");
+        } else if (states[i] == 'r') {
+            fill("blue");
+        } else if (states[i] == 'p') {
+            fill("purple");
+        } else {
+            fill("white");
+        }
+        rect(i * w, height - values[i], w, values[i]);
     }
 }
 
-// The statements in draw() function are executed until the
-// program is stopped. Each statement is executed in
-// sequence and after the last line is read, the first
-// line is executed again.
-function draw() {
-    background(220);
-    bubbleSort();
-    simulateSorting();
-}
-
-// The bubbleSort() function sorts taking 8 elements of the array
-// per frame. The algorithm behind this function is 
-// bubble sort.
-function bubbleSort() {
-    for (let k = 0; k < 8; k++) {
-        if (i < values.length) {
-            let temp = values[j];
+async function bubbleSort() {
+    for (let i = 0; i < values.length - 1; i++) {
+        for (let j = 0; j < values.length - i; j++) {
             if (values[j] > values[j + 1]) {
-                values[j] = values[j + 1];
-                values[j + 1] = temp;
+                await swap(values, j, j + 1);
             }
-            j++;
-
-            if (j >= values.length - i - 1) {
-                j = 0;
-                i++;
-            }
-        } else {
-            noLoop();
         }
     }
 }
 
-// The simulateSorting() function helps in animating
-// the whole bubble sort algorithm
-// by drawing the rectangles using values
-// in the array as the length of the rectangle.
-function simulateSorting() {
-    for (let i = 0; i < values.length; i++) {
-        stroke(100, 143, 143);
-        fill(50);
-        rect(i * 8, height, 8, -values[i], 20);
+async function swap(items, leftIndex, rightIndex) {
+    await sleep(delay);
+    var temp = items[leftIndex];
+    items[leftIndex] = items[rightIndex];
+    items[rightIndex] = temp;
+}
+
+async function partition(items, left, right) {
+    var pivot = items[Math.floor((right + left) / 2)], //middle element
+        i = left, //left pointer
+        j = right; //right pointer
+    while (i <= j) {
+        while (items[i] < pivot) {
+            i++;
+        }
+        while (items[j] > pivot) {
+            j--;
+        }
+        if (i <= j) {
+            await swap(items, i, j); //swap two elements
+            i++;
+            j--;
+        }
     }
+    return i;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

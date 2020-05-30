@@ -1,8 +1,8 @@
-// Single-sketch example
+// quick sort
 
 // init
 var w = 2;
-var delay = 10;
+var delay = 0;
 var values = [];
 var states = [];
 
