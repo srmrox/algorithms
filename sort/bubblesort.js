@@ -1,38 +1,24 @@
 // bubble sort
 
 // init
-var w = 5;
-var delay = 0;
-var values = [];
-var states = [];
+var values,     // array hosting values
+    states,     // array hosting state for color coding
+    canvas,     // blank canvas for media recorder
+    recorder;   // blank recording for recording alogrithm visualization
 
-function setup() {
+
+// setup bars with increasing values and shuffle them
+async function setup() {
     createCanvas(windowWidth, windowHeight);
-    values = new Array(floor(width / w));
-    for (i = 0; i < values.length; i++) {
-        values[i] = floor(random(height));
-        states[i] = 'u';
-    }
-    bubbleSort();
+    ({ canvas, recorder } = startRecording(canvas, recorder));
+    ({ values, states } = await setupBars(windowWidth));
+    await shuffleArray(values);
+    await bubbleSort();
+    stopRecording(recorder);
 }
 
-function draw() {
-    background("black");
-    for (i = 0; i < values.length; i++) {
-        noStroke();
-        if (states[i] == 's') {
-            fill("red");
-        } else if (states[i] == 'l') {
-            fill("green");
-        } else if (states[i] == 'r') {
-            fill("blue");
-        } else if (states[i] == 'p') {
-            fill("purple");
-        } else {
-            fill("white");
-        }
-        rect(i * w, height - values[i], w, values[i]);
-    }
+async function draw() {
+    await drawBars(values, states);
 }
 
 async function bubbleSort() {
@@ -42,36 +28,8 @@ async function bubbleSort() {
                 await swap(values, j, j + 1);
             }
         }
+        states[values.length - i - 1] = "lime";
     }
-}
-
-async function swap(items, leftIndex, rightIndex) {
-    await sleep(delay);
-    var temp = items[leftIndex];
-    items[leftIndex] = items[rightIndex];
-    items[rightIndex] = temp;
-}
-
-async function partition(items, left, right) {
-    var pivot = items[Math.floor((right + left) / 2)], //middle element
-        i = left, //left pointer
-        j = right; //right pointer
-    while (i <= j) {
-        while (items[i] < pivot) {
-            i++;
-        }
-        while (items[j] > pivot) {
-            j--;
-        }
-        if (i <= j) {
-            await swap(items, i, j); //swap two elements
-            i++;
-            j--;
-        }
-    }
-    return i;
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    states[1] = "lime";
+    states[0] = "lime";
 }

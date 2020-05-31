@@ -6,19 +6,21 @@
   <script src="js/p5.dom.min.js"></script>
   <script src="js/p5.sound.min.js"></script>
   <script src="js/CanvasRecorder.js"></script>
-  <script src="js/util.js"></script>
+  <script src="js/recorder.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-  <script src="sort/quicksort.js"></script>
+  <script src="sort/insertionsort.js"></script>
 
   <link rel="stylesheet" type="text/css" href="css/style.css">
 
   <meta charset="utf-8">
 </head>
 
-<body></body>
+<body onload="loadFunc();">
+  <button class="btn success" onclick="stopFunc();">Save</button>
+</body>
 
 </html>
