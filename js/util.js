@@ -73,7 +73,7 @@ function sleep(ms) {
 
 function startRecording(canvas, recorder) {
     canvas = document.getElementById('defaultCanvas0');
-    recorder = new CanvasRecorder(canvas);
+    recorder = new CanvasRecorder(canvas, { mimeType: 'video/mp4' });
     recorder.start();
 
     return { canvas, recorder }
